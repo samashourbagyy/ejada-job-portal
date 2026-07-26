@@ -10,8 +10,16 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserSkill {
-
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_skills_seq_generator"
+    )
+    @SequenceGenerator(
+            name = "user_skills_seq_generator",
+            sequenceName = "USER_SKILLS_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "USER_SKILL_ID")
     private Long userSkillId;
 

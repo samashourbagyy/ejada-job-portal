@@ -15,6 +15,15 @@ import java.util.Date;
 public class Application {
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "applications_seq_generator"
+    )
+    @SequenceGenerator(
+            name = "applications_seq_generator",
+            sequenceName = "APPLICATIONS_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "APPLICATION_ID")
     private Long applicationId;
 

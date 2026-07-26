@@ -15,6 +15,15 @@ import java.util.Date;
 public class Notification {
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "notifications_seq_generator"
+    )
+    @SequenceGenerator(
+            name = "notifications_seq_generator",
+            sequenceName = "NOTIFICATIONS_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "NOTIFICATION_ID")
     private Long notificationId;
 
@@ -29,5 +38,5 @@ public class Notification {
     private Date createdAt;
 
     @Column(name = "IS_READ", length = 1)
-    private String isRead;
+    private Character isRead;
 }

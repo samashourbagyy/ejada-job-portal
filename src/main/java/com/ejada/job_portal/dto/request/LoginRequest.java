@@ -1,4 +1,4 @@
-package com.ejada.job_portal.dto;
+package com.ejada.job_portal.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

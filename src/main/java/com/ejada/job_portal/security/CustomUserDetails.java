@@ -30,6 +30,16 @@ public class CustomUserDetails implements UserDetails {
                 new SimpleGrantedAuthority("ROLE_" + user.getRole())
         );
     }
+    public String getRole() {
+        return user.getRole();
+    }
+    public Long getUserId() {
+        return user.getUserId();
+    }
+
+    public User getUser() {
+        return user;
+    }
     @Override
     public boolean isAccountNonExpired() {
         return true;

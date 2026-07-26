@@ -3,6 +3,8 @@ package com.ejada.job_portal.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "USER_PROFILES")
 @Getter
@@ -13,6 +15,15 @@ import lombok.*;
 public class UserProfile {
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_profiles_seq_generator"
+    )
+    @SequenceGenerator(
+            name = "user_profiles_seq_generator",
+            sequenceName = "USER_PROFILES_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "PROFILE_ID")
     private Long profileId;
 
@@ -29,7 +40,7 @@ public class UserProfile {
     private String university;
 
     @Column(name = "GPA")
-    private Double gpa;
+    private BigDecimal gpa;
 
     @Column(name = "ACCOUNT_TYPE", nullable = false, length = 20)
     private String accountType;

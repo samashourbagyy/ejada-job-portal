@@ -12,6 +12,15 @@ import lombok.*;
 public class OpportunitySkill {
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "opportunity_skills_seq_generator"
+    )
+    @SequenceGenerator(
+            name = "opportunity_skills_seq_generator",
+            sequenceName = "OPPORTUNITY_SKILLS_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "OPPORTUNITY_SKILL_ID")
     private Long opportunitySkillId;
 

@@ -2,17 +2,31 @@ package com.ejada.job_portal.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 
-@MappedSuperclass
+@Entity
+@Table(name = "OPPORTUNITIES")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
+
 public abstract class Opportunity {
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "opportunities_seq_generator"
+    )
+    @SequenceGenerator(
+            name = "opportunities_seq_generator",
+            sequenceName = "OPPORTUNITIES_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "OPPORTUNITY_ID")
     protected Long opportunityId;
 

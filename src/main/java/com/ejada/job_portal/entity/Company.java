@@ -13,6 +13,15 @@ import lombok.*;
 public class Company {
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "companies_seq_generator"
+    )
+    @SequenceGenerator(
+            name = "companies_seq_generator",
+            sequenceName = "COMPANIES_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "COMPANY_ID")
     private Long companyId;
 
@@ -22,6 +31,6 @@ public class Company {
     @Column(name = "COMPANY_NAME", nullable = false, length = 100)
     private String companyName;
 
-    @Column(name = "IS_APPROVED", nullable = false, length = 1)
-    private String isApproved;
+    @Column(name = "INDUSTRY", nullable = false, length = 100)
+    private String industry;
 }

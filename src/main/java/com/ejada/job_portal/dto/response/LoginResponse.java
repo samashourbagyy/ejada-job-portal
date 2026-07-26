@@ -1,4 +1,4 @@
-package com.ejada.job_portal.dto;
+package com.ejada.job_portal.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +12,7 @@ import lombok.Setter;
 @Builder
 public class LoginResponse {
 
-    private String token;
+    private String accessToken;
 
+    private String refreshToken;
 }

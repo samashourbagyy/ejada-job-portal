@@ -19,5 +19,5 @@ public class Internship extends Opportunity {
     private Integer durationMonths;
 
     @Column(name = "IS_PAID", length = 1)
-    private String isPaid;
+    private Character isPaid;
 }

@@ -15,6 +15,15 @@ import java.util.Date;
 public class Experience {
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "experiences_seq_generator"
+    )
+    @SequenceGenerator(
+            name = "experiences_seq_generator",
+            sequenceName = "EXPERIENCES_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "EXPERIENCE_ID")
     private Long experienceId;
 
@@ -36,5 +45,5 @@ public class Experience {
     private Date endDate;
 
     @Column(name = "IS_CURRENT", length = 1)
-    private String isCurrent;
+    private Character isCurrent;
 }
