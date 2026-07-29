@@ -11,4 +11,5 @@ public interface ExperienceRepository extends JpaRepository<Experience, Long> {
 
     List<Experience> findByProfileId(Long profileId);
 
+    void deleteByProfileId(Long profileId);
 }

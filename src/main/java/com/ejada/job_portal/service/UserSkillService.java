@@ -59,4 +59,9 @@ public class UserSkillService {
                         .getSkillName())
                 .toList();
     }
+
+    @Transactional
+    public void deleteByProfileId(Long profileId) {
+        userSkillRepository.deleteByProfileId(profileId);
+    }
 }

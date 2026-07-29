@@ -20,7 +20,7 @@ import java.util.List;
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final UserProfileMapper userProfileMapper;
     private final UserSkillService userSkillService;
     private final ExperienceService experienceService;
@@ -34,9 +34,9 @@ public class UserProfileService {
         if (userProfileRepository.findByUserId(userId).isPresent()) {
             throw new IllegalArgumentException("User profile already exists");
         }
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new ResourceNotFoundException("No user found");
-        }
+
+        userService.getUser(userId);
+
         UserProfile profile = userProfileMapper.toEntity(request);
 
         profile.setUserId(userId);
@@ -70,6 +70,11 @@ public class UserProfileService {
 
         userProfileRepository.save(profile);
 
+        // Remove old skills and experiences
+        userSkillService.deleteByProfileId(profile.getProfileId());
+        experienceService.deleteByProfileId(profile.getProfileId());
+
+        // Save the updated ones
         userSkillService.saveSkills(
                 profile.getProfileId(),
                 request.getSkills());

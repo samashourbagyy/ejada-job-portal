@@ -2,17 +2,20 @@ package com.ejada.job_portal.controller;
 
 import com.ejada.job_portal.dto.request.CompanyRequestDto;
 import com.ejada.job_portal.dto.response.CompanyResponseDto;
+import com.ejada.job_portal.entity.Company;
+import com.ejada.job_portal.security.CustomUserDetails;
 import com.ejada.job_portal.service.CompanyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/companies")
 @RequiredArgsConstructor
@@ -42,5 +45,15 @@ public class CompanyController {
             @PathVariable Long id) {
 
         return ResponseEntity.ok(companyService.getCompanyById(id));
+    }
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('COMPANY')")
+    public ResponseEntity<CompanyResponseDto> getMyCompany(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Company company = companyService.getCompanyByUserId(userDetails.getUserId());
+
+        return ResponseEntity.ok(
+                companyService.getCompanyById(company.getCompanyId()));
     }
 }

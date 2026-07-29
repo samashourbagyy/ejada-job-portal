@@ -6,6 +6,7 @@ import com.ejada.job_portal.security.CustomUserDetails;
 import com.ejada.job_portal.service.UserProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,4 +74,6 @@ public class UserProfileController {
         return ResponseEntity.ok(
                 userProfileService.getProfileByProfileId(profileId));
     }
+
+
 }

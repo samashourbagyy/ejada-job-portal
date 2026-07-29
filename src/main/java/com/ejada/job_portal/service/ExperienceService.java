@@ -53,4 +53,9 @@ public class ExperienceService {
 
         return experienceMapper.toDto(experience);
     }
+
+    @Transactional
+    public void deleteByProfileId(Long profileId) {
+        experienceRepository.deleteByProfileId(profileId);
+    }
 }
