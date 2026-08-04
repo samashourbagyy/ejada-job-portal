@@ -87,4 +87,9 @@ public class CompanyService {
                     })
                     .toList();
         }
+
+    public Company getCompanyByName(String companyName) {
+     return  companyRepository.findByCompanyName(companyName).
+             orElseThrow(()->new ResourceNotFoundException("No Company with that name"));
     }
+}

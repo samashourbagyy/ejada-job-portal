@@ -3,11 +3,13 @@ package com.ejada.job_portal.service;
 import com.ejada.job_portal.entity.Company;
 import com.ejada.job_portal.entity.Opportunity;
 import com.ejada.job_portal.exception.ResourceNotFoundException;
+import com.ejada.job_portal.repository.ApplicationRepository;
 import com.ejada.job_portal.repository.OpportunityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,7 +18,8 @@ public class OpportunityService {
 
     private final OpportunityRepository opportunityRepository;
     private final CompanyService companyService;
-
+    private final ApplicationRepository applicationRepository;
+    private static final String STATUS_CLOSED = "CLOSED";
     public List<Opportunity> getAllOpportunities() {
         return opportunityRepository.findAll();
     }
@@ -76,5 +79,38 @@ public class OpportunityService {
         return companyService
                 .getCompanyById(opportunity.getCompanyId())
                 .getCompanyName();
+    }
+    public void validateOpportunityAvailability(Opportunity opportunity) {
+
+        if (STATUS_CLOSED.equalsIgnoreCase(opportunity.getStatus())) {
+            throw new IllegalStateException("This opportunity is closed for applications");
+        }
+
+        LocalDate deadline = opportunity.getDeadline() == null
+                ? null
+                : new java.sql.Date(opportunity.getDeadline().getTime()).toLocalDate();
+
+        if (deadline != null && LocalDate.now().isAfter(deadline)) {
+            throw new IllegalStateException("The application deadline has passed");
+        }
+
+        Integer maxApplicants = opportunity.getMaxApplicants();
+        if (maxApplicants != null
+                && applicationRepository.countByOpportunityId(opportunity.getOpportunityId()) >= maxApplicants) {
+            throw new IllegalStateException("This opportunity has reached its maximum number of applicants");
+        }
+    }
+    public List<Opportunity> getOpportunitiesByCompanyId(Long companyId) {
+
+        return opportunityRepository.findByCompanyId(companyId);
+    }
+
+    public List<Opportunity> getOpportunitiesByCompanyName(String companyName) {
+
+        Long companyId = companyService
+                .getCompanyByName(companyName)
+                .getCompanyId();
+
+        return opportunityRepository.findByCompanyId(companyId);
     }
 }

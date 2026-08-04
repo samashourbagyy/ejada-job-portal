@@ -50,7 +50,7 @@ public class ApplicationService {
             throw new DuplicateResourceException(
                     "You have already applied to this opportunity");
         }
-
+        opportunityService.validateOpportunityAvailability(opportunity);
 
         Application application = Application.builder()
                 .profileId(profile.getProfileId())
@@ -115,13 +115,15 @@ public class ApplicationService {
 
         applicationRepository.save(application);
 
-        /*notificationService.sendApplicationResult(
-                application.getProfileId(),
-                normalized);*/
+
     }
 
     private Application getApplication(Long applicationId) {
         return applicationRepository.findById(applicationId)
                 .orElseThrow(()->  new ResourceNotFoundException("Not found application"));
+    }
+
+    public Integer countByOpportunityId(Long opportunityId) {
+        return applicationRepository.countByOpportunityId(opportunityId);
     }
 }

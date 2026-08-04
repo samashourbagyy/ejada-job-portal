@@ -4,6 +4,7 @@ import com.ejada.job_portal.dto.request.LoginRequest;
 import com.ejada.job_portal.dto.request.RegisterRequest;
 import com.ejada.job_portal.dto.response.LoginResponse;
 import com.ejada.job_portal.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(
-            @RequestBody RegisterRequest request
+          @Valid @RequestBody RegisterRequest request
     ) {
 
         authService.register(request);

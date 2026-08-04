@@ -5,14 +5,17 @@ import com.ejada.job_portal.dto.request.RegisterRequest;
 import com.ejada.job_portal.dto.response.LoginResponse;
 import com.ejada.job_portal.entity.User;
 import com.ejada.job_portal.exception.DuplicateResourceException;
+import com.ejada.job_portal.exception.ResourceNotFoundException;
 import com.ejada.job_portal.repository.UserRepository;
 import com.ejada.job_portal.security.CustomUserDetails;
 import com.ejada.job_portal.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.authentication.BadCredentialsException;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +28,13 @@ public class AuthService {
 
     public void register(RegisterRequest request) {
 
-        System.out.println("Step 1");
+
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new DuplicateResourceException("Email already exists");
         }
 
-        System.out.println("Step 2");
+
 
         User user = User.builder()
                 .email(request.getEmail())
@@ -39,30 +42,34 @@ public class AuthService {
                 .role("USER")
                 .build();
 
-        System.out.println("Step 3");
+
 
         userRepository.save(user);
 
-        System.out.println("Step 4");
+
     }
+
 
     public LoginResponse login(LoginRequest request) {
 
-        // Authenticate the user's credentials
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException ex) {
+            throw new BadCredentialsException(
+                    "Invalid email or password.");
+        }
 
-        // Load the user from the database
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found."));
 
         CustomUserDetails userDetails = new CustomUserDetails(user);
 
-        // Generate JWTs
         String accessToken = jwtService.generateAccessToken(userDetails);
         String refreshToken = jwtService.generateRefreshToken(userDetails);
 

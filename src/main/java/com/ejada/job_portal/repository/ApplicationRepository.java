@@ -17,4 +17,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Optional<Application> findByProfileIdAndOpportunityId(
             Long profileId,
             Long opportunityId);
+
+    Integer countByOpportunityId(Long opportunityId);
 }
